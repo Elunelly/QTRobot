@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QTrobot - Virtual Robot</title>
-  <script src="https://cdn.jsdelivr.net/npm/roslib@1.0.1/build/roslib.min.js"></script>
-  <script defer src="./QTrobot.js"></script>
-  <script defer src="./QTrobotAPIrequest.js"></script>
+  <script defer src="./script.js"></script>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -14,17 +12,13 @@
 
   <!-- Container to display the robot image -->
   <div id="qtrobot-container">
-    <img id="qtrobot-img" src="qtrobot_default.png" alt="QTrobot">
+    <img id="qt-head" src="./../res/img/QT-head.png" alt="QTrobot">
+    <img id="qt-face" src="./../res/img/QT-faces_neutral_state_blinking.gif" alt="QTrobot">
   </div>
 
   <!-- Control Panel for Interactions -->
   <div id="controls">
-    <select id="emotion-select">
-      <option value="happy">Happy</option>
-      <option value="sad">Sad</option>
-      <option value="angry">Angry</option>
-      <option value="neutral">Neutral</option>
-    </select>
+    <select id="emotion-select"></select>
     <input type="text" id="speak-text" placeholder="Type something for QTrobot to say" />
     <button onclick="makeQTrobotSpeak()">Speak</button>
   </div>

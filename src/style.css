@@ -1,5 +1,6 @@
 
 /* Style for the QTrobot container */
+
 #qtrobot-container {
   display: flex;
   justify-content: center;
@@ -9,10 +10,32 @@
   margin: 20px;
 }
 
-/* Basic style for the robot image */
-#qtrobot-img {
-  max-width: 400px;
-  max-height: 400px;
+/* Container to hold both images */
+/*
+#qt-container {
+    position: relative;
+    width: 300px;
+    height: auto;
+}
+*/
+/* Background head image */
+#qt-head {
+  position: absolute;
+  width: auto;
+  height: 400px;
+  display: block;
+  z-index: 10;
+}
+
+/* Face image positioned over the transparent screen */
+#qt-face {
+  position: absolute; /* Absolute position relative to the container */
+  bottom: 186px; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust to center perfectly */
+  width: 345px; /* Adjust width to fit the transparent screen */
+  height: auto;
+  z-index: 5;
 }
 
 /* Style for interaction controls */

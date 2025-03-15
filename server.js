@@ -2,7 +2,6 @@
 // ----------------------------------------[ Constants initialization in Server scope ]--------------------------------------- //
 
 // Declaration and initialization of needed Constants and variables
-const { execSync } = require("child_process");
 const express   = require("express");     // 'express' is installed, if not, run: $ npm install express
 const path      = require('path');        // to easily join directory and file path, plus other methods
 const cors      = require('cors');        // Enable Cross-Origin Requests
@@ -39,13 +38,6 @@ const colorize = (...args) => ({
 const args      = process.argv.slice(2);
 const defport   = '8000';
 let port        = defport;
-
-try {
-  execSync("docker -v", { stdio: "ignore" });
-} catch (error) {
-  console.log(colorize("⚠️ Warning: Docker is not installed. Installing now...").red);
-  require("./dockerInstall.js"); // Runs the install script
-}
 
 (async () => {
   port = await getPort(args[0]); // The argument 0 is the port (if any)
