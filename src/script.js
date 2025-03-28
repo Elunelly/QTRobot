@@ -27,7 +27,7 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 // +-------------------------------------------------------------------------------------------+ //
   const QTfaces_path = './res/img/';
   const QTfaces_fileStart = 'QT-faces_';
-  const QTfaces_ext = '.gif';
+  const QTfaces_ext = '.avi';
   const QTfaces_lib = [
     "afraid",
     "angry",
