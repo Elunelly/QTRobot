@@ -20,100 +20,60 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
 
 (() => {
-// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■[ controls ]■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ //
-// █                                                                                           █ //
-// +-------------------------------------------------------------------------------------------+ //
-//                               -  -- Block-Variables [ct_] --  -                               //
-// +-------------------------------------------------------------------------------------------+ //
   const QTfaces_path = './res/img/';
   const QTfaces_fileStart = 'QT-faces_';
   const QTfaces_ext = '.gif';
-  const QTfaces_lib = [
-    "afraid",
-    "angry",
-    "blowing_raspberry",
-    "breathing_exercise",
-    "brushing_teeth_foam",
-    "brushing_teeth",
-    "calming_down_exercise_nose",
-    "calming_down",
-    "confused",
-    "cry",
-    "dirty_face_sad",
-    "dirty_face_wash",
-    "dirty_face",
-    "disgusted",
-    "happy_blinking",
-    "happy",
-    "kiss",
-    "neutral_state_blinking",
-    "neutral",
-    "puffing_the_chredo_eeks",
-    "sad",
-    "scream",
-    "showing_smile",
-    "shy",
-    "talking",
-    "with_a_cold_cleaning_nose",
-    "with_a_cold_sneezing",
-    "with_a_cold",
-    "yawn",
-  ];
-  const ddSelect = document.getElementById('emotion-select');
+  const defaultFace = "talking";
+
   const qtFace = document.getElementById('qt-face');
 
-// +-------------------------------------------------------------------------------------------+ //
-//                               -  -- Block-Functions [ct_] --  -                               //
-// +-------------------------------------------------------------------------------------------+ //
-  function getQTfaceImg(emotion){
-    return QTfaces_path+QTfaces_fileStart+ emotion + QTfaces_ext;
+  async function loadStory(fileName) {
+    const response = await fetch('./res/txt/'+fileName+'.txt');
+    const text = await response.text();
+    return text.split('\n').map(line => line.trim()).filter(line => line);
+  }
+
+  function getQTfaceImg(emotion) {
+    return QTfaces_path + QTfaces_fileStart + emotion + QTfaces_ext;
   }
 
   function changeEmotion(emotion) {
     qtFace.src = getQTfaceImg(emotion);
+    setTimeout(() => {
+      qtFace.src = getQTfaceImg(defaultFace);
+    }, 2000);
   }
 
-  function initDropdown() {
-    ddSelect.innerHTML = '';
-    QTfaces_lib.forEach((emotionName) => {
-      const item = document.createElement('option');
-      item.textContent = emotionName;
-      item.setAttribute('value', emotionName);
-      if (getQTfaceImg(emotionName)==qtFace.src) {
-        item.setAttribute('selected');
+  async function playStory(fileName) {
+    const storyLines = await loadStory(fileName);
+    let index = 0;
+
+    async function displayNextSentence() {
+      if (index < storyLines.length) {
+        let text = storyLines[index];
+        let parts = text.split(/(\[.*?\])/g).filter(Boolean);
+
+        async function processParts(i) {
+          if (i < parts.length) {
+            let part = parts[i];
+            let emotionMatch = part.match(/\[(.*?)\]/);
+            if (emotionMatch) {
+              changeEmotion(emotionMatch[1]);
+              setTimeout(() => processParts(i + 1), 1000);
+            } else {
+              document.getElementById('story-container').innerText = part;
+              setTimeout(() => processParts(i + 1), 2000);
+            }
+          } else {
+            index++;
+            setTimeout(displayNextSentence, 1000);
+          }
+        }
+        processParts(0);
       }
-      ddSelect.appendChild(item);
-    });
+    }
+    displayNextSentence();
   }
 
-// +-------------------------------------------------------------------------------------------+ //
-//                             -  -- Block-EventListener [ct_] --  -                             //
-// +-------------------------------------------------------------------------------------------+ //
-  initDropdown();
-  ddSelect.addEventListener('change', (event) => {
-    const emotion = event.target.value;
-    changeEmotion(emotion);
-  });
-// █                                                                                           █ //
-// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ //
-})();
-
-
-(() => {
-// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■[ section_name ]■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ //
-// █                                                                                           █ //
-// +-------------------------------------------------------------------------------------------+ //
-//                               -  -- Block-Variables [sn_] --  -                               //
-// +-------------------------------------------------------------------------------------------+ //
-
-// +-------------------------------------------------------------------------------------------+ //
-//                               -  -- Block-Functions [sn_] --  -                               //
-// +-------------------------------------------------------------------------------------------+ //
-
-// +-------------------------------------------------------------------------------------------+ //
-//                             -  -- Block-EventListener [sn_] --  -                             //
-// +-------------------------------------------------------------------------------------------+ //
-
-// █                                                                                           █ //
-// ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ //
+  document.getElementById('play-button').onclick = playStory("Histoire");
 })();

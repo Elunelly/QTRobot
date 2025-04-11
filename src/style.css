@@ -2,23 +2,16 @@
 /* Style for the QTrobot container */
 
 #qtrobot-container {
+  position: relative; /* Ajouté pour que les enfants absolus se positionnent par rapport à ce conteneur */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start; /* Aligné à gauche */
+  align-items: center;     /* Centré verticalement */
   height: 80vh;
   border: 2px solid #ccc;
   margin: 20px;
 }
 
-/* Container to hold both images */
-/*
-#qt-container {
-    position: relative;
-    width: 300px;
-    height: auto;
-}
-*/
-/* Background head image */
+/* Tête du robot */
 #qt-head {
   position: absolute;
   width: auto;
@@ -27,13 +20,13 @@
   z-index: 10;
 }
 
-/* Face image positioned over the transparent screen */
+/* Visage du robot */
 #qt-face {
-  position: absolute; /* Absolute position relative to the container */
-  bottom: 186px; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Adjust to center perfectly */
-  width: 345px; /* Adjust width to fit the transparent screen */
+  position: absolute;
+  bottom: 112px;
+  left: 0;
+  transform: translate(20%, -50%);
+  width: 345px;
   height: auto;
   z-index: 5;
 }
@@ -49,4 +42,29 @@
 select, button, input {
   padding: 10px;
   font-size: 16px;
+}
+
+body {
+  background: linear-gradient(to top, #87CEEB, #FFD700);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100vh;
+  position: relative;
+}
+
+/* Titre */
+h1 {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-size: 3em;
+  text-align: center;
+  color: #FF4500;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  margin-top: 20px;
+}
+
+#story-container{
+  position: relative; /* Ajouté pour que les enfants absolus se positionnent par rapport à ce conteneur */
+  display: flex;
+  justify-content: flex-end; /* Aligné à gauche */
+  align-items: center;     /* Centré verticalement */
 }
