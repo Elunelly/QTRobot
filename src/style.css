@@ -1,33 +1,38 @@
-
 /* Style for the QTrobot container */
-
 #qtrobot-container {
-  position: fixed; /* Ajouté pour que les enfants absolus se positionnent par rapport à ce conteneur */
+  position: fixed;
   display: flex;
-  justify-content: flex-start; /* Aligné à gauche */
-  align-items: center;     /* Centré verticalement */
+  justify-content: flex-start;
+  align-items: center;
   height: 115vh;
   margin: 20px;
 }
 
-/* Tête du robot */
+/* Wrapper to align face inside head */
+#qt-frame-wrapper {
+  position: relative;
+  width: fit-content;
+  height: auto;
+}
+
+/* Corps du robot */
 #qt-head {
-  /*position: absolute;*/
-  width: auto;
-  height: 900px;
   display: block;
+  height: 900px;
+  width: auto;
   z-index: 10;
+  position: relative;
 }
 
 /* Visage du robot */
 #qt-face {
-  position: fixed;
-  bottom: 350px;
-  left: 0;
-  transform: translate(60%, -50%);
+  position: absolute;
+  top: 18%;       /* Ajuster pour alignement vertical précis */
+  left: 41%;
+  transform: translate(-50%, -50%);
   width: 270px;
   height: auto;
-  z-index: 5;
+  z-index: 9;
 }
 
 /* Style for interaction controls */
@@ -51,7 +56,6 @@ body {
   position: relative;
 }
 
-/* Titre */
 h1 {
   font-family: 'Comic Sans MS', cursive, sans-serif;
   font-size: 3em;
@@ -89,4 +93,3 @@ h1 {
   display: flex;
   justify-content: space-around;
 }
-

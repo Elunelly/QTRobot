@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>QTrobot - Virtual Robot</title>
   <script defer src="./script.js"></script>
   <link rel="stylesheet" href="./style.css">
@@ -10,30 +10,19 @@
 <body>
   <h1 style="text-align:center;">QTrobot - Virtual Robot</h1>
 
-  <!-- Container to display the robot image -->
-  <div>
   <div id="qtrobot-container">
-    <img id="qt-head" src="./../res/img/QT-body.png" alt="QTrobot">
-    <img id="qt-face" src="./../res/img/_QT-faces_neutral_state_blinking.gif" alt="QTrobot">
-  <center>
-    <div id="story-box">
-      <div id="story-container"></div>
-      <div id="buttons">
-        <button id="play-button">▶️</button>
-        <button id="pause-button">⏸️</button>
-      </div>
+    <div id="qt-frame-wrapper">
+      <img id="qt-head" src="./../res/img/QT-body.png" alt="QTrobot">
+      <img id="qt-face" src="./../res/img/_QT-faces_neutral_state_blinking.gif" alt="QTrobot face">
     </div>
-    
-
-  <!-- Control Panel for Interactions -->
- <!--<div id="controls">
-    <select id="emotion-select"></select>
-    <input type="text" id="speak-text" placeholder="Type something for QTrobot to say" />
-    <button onclick="makeQTrobotSpeak()">Speak</button>
   </div>
-  <center>
-  <div id="story-container"></div>
-<button id="play-button">Lancer l'histoire</button>
-</center> -->
+
+  <div id="story-box">
+    <div id="story-container"></div>
+    <div id="buttons">
+      <button id="play-button">▶️</button>
+      <button id="pause-button">⏸️</button>
+    </div>
+  </div>
 </body>
 </html>
