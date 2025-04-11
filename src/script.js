@@ -21,11 +21,18 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
 (() => {
   const QTfaces_path = './res/img/';
-  const QTfaces_fileStart = 'QT-faces_';
+  const QTfaces_fileStart = '_QT-faces_';
   const QTfaces_ext = '.gif';
-  const defaultFace = "talking";
+  //const defaultFace = "talking";
 
   const qtFace = document.getElementById('qt-face');
+  const playBtn = document.getElementById('play-button');
+  const pauseBtn = document.getElementById('pause-button');
+
+  let paused = false;
+  let index = 0;
+  let storyLines = [];
+  let currentTimeout;
 
   async function loadStory(fileName) {
     const response = await fetch('./res/txt/'+fileName+'.txt');
@@ -39,41 +46,53 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
   function changeEmotion(emotion) {
     qtFace.src = getQTfaceImg(emotion);
-    setTimeout(() => {
-      qtFace.src = getQTfaceImg(defaultFace);
-    }, 2000);
+    //setTimeout(() => {
+      //qtFace.src = getQTfaceImg(defaultFace);
+    //}, 1000);
   }
 
   async function playStory(fileName) {
-    const storyLines = await loadStory(fileName);
-    let index = 0;
+    if (storyLines.length === 0) {
+      storyLines = await loadStory(fileName);
+      index = 0;
+    
 
     async function displayNextSentence() {
-      if (index < storyLines.length) {
-        let text = storyLines[index];
-        let parts = text.split(/(\[.*?\])/g).filter(Boolean);
+      if (paused || index >= storyLines.length) return;
 
-        async function processParts(i) {
-          if (i < parts.length) {
-            let part = parts[i];
-            let emotionMatch = part.match(/\[(.*?)\]/);
-            if (emotionMatch) {
-              changeEmotion(emotionMatch[1]);
-              setTimeout(() => processParts(i + 1), 1000);
-            } else {
-              document.getElementById('story-container').innerText = part;
-              setTimeout(() => processParts(i + 1), 2000);
-            }
-          } else {
-            index++;
-            setTimeout(displayNextSentence, 1000);
-          }
+      const text = storyLines[index];
+      const parts = text.split(/(\[.*?\])/g).filter(Boolean);
+
+      async function processParts(i) {
+        if (paused || i >= parts.length) return;
+
+        const part = parts[i];
+        const emotionMatch = part.match(/\[(.*?)\]/);
+
+        if (emotionMatch) {
+          changeEmotion(emotionMatch[1]);
+          currentTimeout = setTimeout(() => processParts(i + 1), 1000);
+        } else {
+          document.getElementById('story-container').innerText = part;
+          currentTimeout = setTimeout(() => processParts(i + 1), 2000);
         }
-        processParts(0);
       }
-    }
-    displayNextSentence();
-  }
 
-  document.getElementById('play-button').onclick = playStory("Histoire");
+      await processParts(0);
+      index++;
+      currentTimeout = setTimeout(displayNextSentence, 1000);
+    }
+
+    displayNextSentence();
+  }}
+
+  playBtn.onclick = () => {
+    paused = false;
+    playStory("Histoire");
+  };
+
+  pauseBtn.onclick = () => {
+    paused = true;
+    clearTimeout(currentTimeout);
+  };
 })();

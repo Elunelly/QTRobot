@@ -11,13 +11,22 @@
   <h1 style="text-align:center;">QTrobot - Virtual Robot</h1>
 
   <!-- Container to display the robot image -->
+  <div>
   <div id="qtrobot-container">
-    <img id="qt-head" src="./../res/img/QT-head.png" alt="QTrobot">
-    <img id="qt-face" src="./../res/img/QT-faces_neutral_state_blinking.gif" alt="QTrobot">
-  </div>
+    <img id="qt-head" src="./../res/img/QT-body.png" alt="QTrobot">
+    <img id="qt-face" src="./../res/img/_QT-faces_neutral_state_blinking.gif" alt="QTrobot">
+  <center>
+    <div id="story-box">
+      <div id="story-container"></div>
+      <div id="buttons">
+        <button id="play-button">▶️</button>
+        <button id="pause-button">⏸️</button>
+      </div>
+    </div>
+    
 
   <!-- Control Panel for Interactions -->
-  <div id="controls">
+ <!--<div id="controls">
     <select id="emotion-select"></select>
     <input type="text" id="speak-text" placeholder="Type something for QTrobot to say" />
     <button onclick="makeQTrobotSpeak()">Speak</button>
@@ -25,6 +34,6 @@
   <center>
   <div id="story-container"></div>
 <button id="play-button">Lancer l'histoire</button>
-</center>
+</center> -->
 </body>
 </html>

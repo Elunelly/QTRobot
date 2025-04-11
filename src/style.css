@@ -2,31 +2,30 @@
 /* Style for the QTrobot container */
 
 #qtrobot-container {
-  position: relative; /* Ajouté pour que les enfants absolus se positionnent par rapport à ce conteneur */
+  position: fixed; /* Ajouté pour que les enfants absolus se positionnent par rapport à ce conteneur */
   display: flex;
   justify-content: flex-start; /* Aligné à gauche */
   align-items: center;     /* Centré verticalement */
-  height: 80vh;
-  border: 2px solid #ccc;
+  height: 115vh;
   margin: 20px;
 }
 
 /* Tête du robot */
 #qt-head {
-  position: absolute;
+  /*position: absolute;*/
   width: auto;
-  height: 400px;
+  height: 900px;
   display: block;
   z-index: 10;
 }
 
 /* Visage du robot */
 #qt-face {
-  position: absolute;
-  bottom: 112px;
+  position: fixed;
+  bottom: 350px;
   left: 0;
-  transform: translate(20%, -50%);
-  width: 345px;
+  transform: translate(60%, -50%);
+  width: 270px;
   height: auto;
   z-index: 5;
 }
@@ -62,9 +61,32 @@ h1 {
   margin-top: 20px;
 }
 
-#story-container{
-  position: relative; /* Ajouté pour que les enfants absolus se positionnent par rapport à ce conteneur */
+#story-box {
+  position: absolute;
+  right: -500px;
+  top: 25%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 20px;
+  width: 300px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
   display: flex;
-  justify-content: flex-end; /* Aligné à gauche */
-  align-items: center;     /* Centré verticalement */
+  flex-direction: column;
+  gap: 10px;
 }
+
+#story-container {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
