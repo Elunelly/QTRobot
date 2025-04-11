@@ -84,7 +84,7 @@ function initSendHomePage() {
   // Route to serve the index.html (or other HTML files) from the src folder
   app.get('/', (req, res) => {
   //  res.sendFile(path.join(__dirname, 'src', 'index.html'));  // Serve the index.html
-    res.sendFile(path.join(__dirname, 'src', 'index.html'));  // Serve the index.html
+    res.sendFile(path.join(__dirname, 'src', '_index.html'));  // Serve the index.html
   });
 }
 app.get('/:nom', function(req, res) {

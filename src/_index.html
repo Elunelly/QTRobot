@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QTrobot Story Interface</title>
+  <link rel="stylesheet" href="_style.css" />
+</head>
+<body>
+  <header>
+    <div id="logo-container">
+      <img src="luxai-logo.png" alt="LuxAI Logo" id="logo" />
+    </div>
+    <input type="text" id="story-search" placeholder="Search story..." />
+    <div class="menu-container">
+      <button id="hamburger">☰</button>
+      <div id="menu-options" class="hidden">
+        <button onclick="findStory()">Find a story</button>
+        <button onclick="addStory()">Add a new story</button>
+        <button onclick="playRandomStory()">Play random story</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <img src="QT-head.png" alt="QTrobot" id="qtrobot" />
+
+    <div id="speech-area">
+      <div id="story-title">Story title</div>
+      <div id="speech-bubble">
+        <div id="speech-text"></div>
+      </div>
+      <div id="volume-control">
+        <img src="speaker.png" alt="Speaker Icon" />
+        <div id="volume-bar">
+          <div id="volume-fill"></div>
+        </div>
+      </div>
+      <div id="controls">
+        <button id="rewind-btn">⏪</button>
+        <button id="play-btn">▶</button>
+        <button id="forward-btn">⏩</button>
+      </div>
+    </div>
+  </main>
+
+  <script defer src="_script.js"></script>
+</body>
+</html>
