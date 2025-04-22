@@ -23,21 +23,33 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   const QTfaces_path = './res/img/';
   const QTfaces_fileStart = '_QT-faces_';
   const QTfaces_ext = '.gif';
-  //const defaultFace = "talking";
+
+  const QTaudio_path = './res/voice/';
+  const QTaudio_fileStart = 'audio_';
+  const QTaudio_ext = '.mp3';
+
+  const QTstories_path = './res/txt/';
+  const QTstories_ext = '.txt';
+
 
   const qtFace = document.getElementById('qt-face');
   const playBtn = document.getElementById('play-button');
   const pauseBtn = document.getElementById('pause-button');
+  const storyContainer = document.getElementById('story-container');
+  const storySelector = document.getElementById('storySelector');
+  const storyAudio = new Audio();
 
-  let paused = false;
+
+  //let paused = false;
   let index = 0;
-  let storyLines = [];
+  let storyLines;
   let currentTimeout;
+  let isplaying = false;
+  let story;
+  let speed = 10;
 
-  async function loadStory(fileName) {
-    const response = await fetch('./res/txt/'+fileName+'.txt');
-    const text = await response.text();
-    return text.split('\n').map(line => line.trim()).filter(line => line);
+  function getStory(story) {
+    return QTstories_path + story + QTstories_ext;
   }
 
   function getQTfaceImg(emotion) {
@@ -46,53 +58,134 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
   function changeEmotion(emotion) {
     qtFace.src = getQTfaceImg(emotion);
-    //setTimeout(() => {
-      //qtFace.src = getQTfaceImg(defaultFace);
-    //}, 1000);
   }
 
+  function clearStory() {
+    storyContainer.innerText = '';
+  }
+
+  function getQTAudio(fileName) {
+    return QTaudio_path + QTaudio_fileStart + fileName + QTaudio_ext;
+  }
+
+  async function loadStory() {
+    story = storySelector.value;
+    const response = await fetch(getStory(story));
+    const text = await response.text();
+    index = 0;
+    storyLines = text;
+    isplaying = false;
+    console.log(storyLines);
+    return storyLines;
+  }
+
+  async function playStory() {
+    if (isplaying || storyLines.length === 0) return;
+    isplaying = true;
+    changeEmotion('talking');
+    storyAudio.play();
+    displayNextCharacter();
+    isplaying = false;
+
+    function displayNextCharacter() {
+      if(!isplaying || index >= storyLines.length) return;
+      console.log("Hellooo");
+      let char = storyLines[index];
+      index++;
+      console.log(char);
+      storyContainer.innerText += char;
+      currentTimeout = setTimeout(displayNextCharacter, speed);
+    }
+  }
+
+
+
+
+/*
   async function playStory(fileName) {
+    if (isplaying) return;
+    isplaying = true;
+
+    // Load story only once
     if (storyLines.length === 0) {
       storyLines = await loadStory(fileName);
-      index = 0;
-    
+    }
 
-    async function displayNextSentence() {
-      if (paused || index >= storyLines.length) return;
+    function displayNextSentence() {
+      if (paused || index >= storyLines.length) {
+        isplaying = false;
+        return;
+      }
 
       const text = storyLines[index];
       const parts = text.split(/(\[.*?\])/g).filter(Boolean);
 
-      async function processParts(i) {
-        if (paused || i >= parts.length) return;
+      let partIndex = 0;
 
-        const part = parts[i];
+      function processParts() {
+        if (paused || partIndex >= parts.length) {
+          index++;
+          currentTimeout = setTimeout(displayNextSentence, 1000);
+          return;
+        }
+
+        const part = parts[partIndex];
         const emotionMatch = part.match(/\[(.*?)\]/);
 
         if (emotionMatch) {
           changeEmotion(emotionMatch[1]);
-          currentTimeout = setTimeout(() => processParts(i + 1), 1000);
+          partIndex++;
+          currentTimeout = setTimeout(processParts, 50); // Attend 1.5 sec pour laisser l'émotion
         } else {
-          document.getElementById('story-container').innerText = part;
-          currentTimeout = setTimeout(() => processParts(i + 1), 2000);
+          storyContainer.innerText = part;
+          partIndex++;
+          currentTimeout = setTimeout(processParts, 3000); // Attend 3 sec pour lire le texte
         }
       }
 
-      await processParts(0);
-      index++;
-      currentTimeout = setTimeout(displayNextSentence, 1000);
+      processParts();
     }
 
     displayNextSentence();
-  }}
+  }
 
-  playBtn.onclick = () => {
-    paused = false;
-    playStory("Histoire");
-  };
+  playBtn.onclick = async () => {
+    if (paused) {
+      isplaying = false;
+      paused = false;
+      storyAudio.play();
+      changeEmotion('talking');
+      currentTimeout = setTimeout(() => {
+        displayNextSentence();
+      }, 100);
+    } else if (!isplaying) {
+      paused = false;
+      index = 0;
+      storyLines = [];
+      clearStory();
+      storyAudio.src = getQTAudio("Histoire");
+      storyAudio.currentTime = 0;
+      storyAudio.play();
+    }
+    await playStory("Histoire");
+  };*/
+
+  playBtn.onclick = async () => {
+    await playStory();
+  }
 
   pauseBtn.onclick = () => {
-    paused = true;
+    isplaying = false;
+    storyAudio.pause();
     clearTimeout(currentTimeout);
+    changeEmotion('neutral_state_blinking');
   };
+
+  storySelector.onchange = () => {
+    clearStory();
+    loadStory();
+    storyAudio.src = getQTAudio(story);
+    storyAudio.currentTime = 0;
+  };
+  
 })();

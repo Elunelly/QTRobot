@@ -1,5 +1,6 @@
-[talking] Il était une fois un loup qui vivait dans une belle forêt, entouré de tous ses amis. Il s’appelait Loup. 
-Mais ce loup avait un souci : il était trop émotif. Joyeux [happy], fâché [angry], triste [sad], excité… il changeait d’humeur à cent à l’heure !
+[talking] Il était une fois un loup qui vivait dans une belle forêt, entouré de tous ses amis. 
+Il s’appelait Loup. 
+Mais ce loup avait un souci : il était trop émotif.[happy] Joyeux, [angry] fâché, [sad] triste, excité…[talking] il changeait d’humeur à cent à l’heure !
 Ainsi, quand Loup était d’humeur joyeuse, il sifflotait, le cœur léger, faisait des blagues, parlait aux arbres… Il était plein d’énergie et débordait d’idées pour s’amuser !
 Cependant, si quelque chose le contrariait… Ah ! Il se renfrognait, explosait, et envoyait tout le monde balader !
 — Tu dois apprendre à te calmer, Loup, lui dit un jour Maître Hibou, excédé. Tu nous donnes le tournis !
