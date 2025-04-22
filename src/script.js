@@ -28,28 +28,24 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   const QTaudio_fileStart = 'audio_';
   const QTaudio_ext = '.mp3';
 
-  const QTstories_path = './res/txt/';
-  const QTstories_ext = '.txt';
-
 
   const qtFace = document.getElementById('qt-face');
   const playBtn = document.getElementById('play-button');
   const pauseBtn = document.getElementById('pause-button');
   const storyContainer = document.getElementById('story-container');
-  const storySelector = document.getElementById('storySelector');
   const storyAudio = new Audio();
 
 
-  //let paused = false;
+  let paused = false;
   let index = 0;
-  let storyLines;
+  let storyLines = [];
   let currentTimeout;
-  let isplaying = false;
-  let story;
-  let speed = 10;
+  let processing = false;
 
-  function getStory(story) {
-    return QTstories_path + story + QTstories_ext;
+  async function loadStory(fileName) {
+    const response = await fetch('./res/txt/' + fileName + '.txt');
+    const text = await response.text();
+    return text.split('\n').map(line => line.trim()).filter(line => line);
   }
 
   function getQTfaceImg(emotion) {
@@ -67,44 +63,11 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   function getQTAudio(fileName) {
     return QTaudio_path + QTaudio_fileStart + fileName + QTaudio_ext;
   }
+  
 
-  async function loadStory() {
-    story = storySelector.value;
-    const response = await fetch(getStory(story));
-    const text = await response.text();
-    index = 0;
-    storyLines = text;
-    isplaying = false;
-    console.log(storyLines);
-    return storyLines;
-  }
-
-  async function playStory() {
-    if (isplaying || storyLines.length === 0) return;
-    isplaying = true;
-    changeEmotion('talking');
-    storyAudio.play();
-    displayNextCharacter();
-    isplaying = false;
-
-    function displayNextCharacter() {
-      if(!isplaying || index >= storyLines.length) return;
-      console.log("Hellooo");
-      let char = storyLines[index];
-      index++;
-      console.log(char);
-      storyContainer.innerText += char;
-      currentTimeout = setTimeout(displayNextCharacter, speed);
-    }
-  }
-
-
-
-
-/*
   async function playStory(fileName) {
-    if (isplaying) return;
-    isplaying = true;
+    if (processing) return;
+    processing = true;
 
     // Load story only once
     if (storyLines.length === 0) {
@@ -113,7 +76,7 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
     function displayNextSentence() {
       if (paused || index >= storyLines.length) {
-        isplaying = false;
+        processing = false;
         return;
       }
 
@@ -151,14 +114,9 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
   playBtn.onclick = async () => {
     if (paused) {
-      isplaying = false;
       paused = false;
       storyAudio.play();
-      changeEmotion('talking');
-      currentTimeout = setTimeout(() => {
-        displayNextSentence();
-      }, 100);
-    } else if (!isplaying) {
+    } else if (!processing) {
       paused = false;
       index = 0;
       storyLines = [];
@@ -168,24 +126,13 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
       storyAudio.play();
     }
     await playStory("Histoire");
-  };*/
-
-  playBtn.onclick = async () => {
-    await playStory();
-  }
+  };
+  
 
   pauseBtn.onclick = () => {
-    isplaying = false;
+    paused = true;
     storyAudio.pause();
     clearTimeout(currentTimeout);
-    changeEmotion('neutral_state_blinking');
-  };
-
-  storySelector.onchange = () => {
-    clearStory();
-    loadStory();
-    storyAudio.src = getQTAudio(story);
-    storyAudio.currentTime = 0;
   };
   
 })();
