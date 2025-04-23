@@ -46,7 +46,7 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   let currentTimeout;
   let isplaying = false;
   let story;
-  let speed = 10;
+  let speed = 50;
 
   function getStory(story) {
     return QTstories_path + story + QTstories_ext;
@@ -84,11 +84,13 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
     isplaying = true;
     changeEmotion('talking');
     storyAudio.play();
-    displayNextCharacter();
-    isplaying = false;
+    //displayNextCharacter();
+    //isplaying = false;
 
     function displayNextCharacter() {
-      if(!isplaying || index >= storyLines.length) return;
+      if(!isplaying || index >= storyLines.length) {
+      isplaying = false;
+      return;}
       console.log("Hellooo");
       let char = storyLines[index];
       index++;
@@ -96,8 +98,8 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
       storyContainer.innerText += char;
       currentTimeout = setTimeout(displayNextCharacter, speed);
     }
+    displayNextCharacter();
   }
-
 
 
 
