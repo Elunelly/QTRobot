@@ -6,6 +6,7 @@
   align-items: center;
   height: 115vh;
   margin: 20px;
+  z-index: 100;
 }
 
 /* Wrapper to align face inside head */
@@ -49,9 +50,10 @@ select, button, input {
 }
 
 body {
-  background-image: url("./../res/img/background.jpg");
-  background-size: auto;
+  background-image: url("./../res/img/background.gif");
+  background-size: cover;
   position: relative;
+  background-repeat: no-repeat;
 }
 
 h1 {
@@ -65,18 +67,19 @@ h1 {
 
 #story-box {
   position: absolute;
-  right: 400px;
-  top: 100px;
-  background: white;
+  right: 500px;
+  top: 50px;
+  background: rgb(107, 52, 52);
   padding: 20px;
-  width: 600px;
+  width: 400px;
   border-radius: 20px;
   border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  display: flex;
-  flex-direction: column;
+  /*display: flex;
+  flex-direction: column;*/
   gap: 10px;
+  z-index: 1;
 }
 
 #story-container {

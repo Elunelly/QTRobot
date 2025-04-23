@@ -28,21 +28,26 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   const QTaudio_fileStart = 'audio_';
   const QTaudio_ext = '.mp3';
 
+  const QTstories_path = './res/txt/';
+  const QTstories_ext = '.txt';
+
 
   const qtFace = document.getElementById('qt-face');
   const playBtn = document.getElementById('play-button');
   const pauseBtn = document.getElementById('pause-button');
+  const restartBtn = document.getElementById('restart-button');
   const storyContainer = document.getElementById('story-container');
   const storyAudio = new Audio();
 
 
-  let paused = false;
+  //let paused = false;
   let index = 0;
-  let storyLines = [];
+  let storyLines;
   let currentTimeout;
   let isplaying = false;
   let story;
-  let speed = 50;
+  let emotionposList;
+  let speed = 60;
 
   function getStory(story) {
     return QTstories_path + story + QTstories_ext;
@@ -72,7 +77,23 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
     storyLines = text;
     isplaying = false;
     console.log(storyLines);
+    getEmotionPosInText();
     return storyLines;
+  }
+
+  function getEmotionPosInText() {
+    let s = storyLines;
+    let c = 0;
+    let emopos = s.indexOf('[');
+    emotionposList = {};
+    while (emopos != -1) {
+      c+=emopos;
+      s = s.substring(emopos+1);
+      let emotion = s.substring(0,s.indexOf(']'));
+      emotionposList[c]=emotion;
+      emopos = s.indexOf('[');
+    }
+    console.log(emotionposList);
   }
 
   async function playStory() {
@@ -85,14 +106,18 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
     function displayNextCharacter() {
       if(!isplaying || index >= storyLines.length) {
-      isplaying = false;
-      return;}
-      console.log("Hellooo");
-      let char = storyLines[index];
+        isplaying = false;
+        return;
+      }
+      let emotion = emotionposList[index+30];
+      if (emotion)
+        currentTimeout = setTimeout(() => {changeEmotion(emotion)}, 1500);
+      console.log(index + ': ' + currentTimeout);
+      if (emotionposList[index]) index+=emotionposList[index].length+1;
+      else storyContainer.innerText += storyLines[index];
       index++;
-      console.log(char);
-      storyContainer.innerText += char;
       currentTimeout = setTimeout(displayNextCharacter, speed);
+      console.log(index + ': ' + currentTimeout);
     }
     displayNextCharacter();
   }
@@ -181,7 +206,17 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
     changeEmotion('neutral_state_blinking');
   };
 
+  restartBtn.onclick = async () => {
+    isplaying = false;
+    clearStory();
+    clearTimeout(currentTimeout);
+    storyAudio.currentTime = 0;
+    index = 0;
+    await playStory();
+  }
+
   storySelector.onchange = () => {
+    isplaying = false;
     clearStory();
     loadStory();
     storyAudio.src = getQTAudio(story);
