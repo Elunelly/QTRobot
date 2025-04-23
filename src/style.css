@@ -49,10 +49,8 @@ select, button, input {
 }
 
 body {
-  background: linear-gradient(to top, #87CEEB, #FFD700);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  height: 100vh;
+  background-image: url("./../res/img/background.jpg");
+  background-size: auto;
   position: relative;
 }
 
@@ -67,9 +65,8 @@ h1 {
 
 #story-box {
   position: absolute;
-  right: 500px;
-  top: 25%;
-  transform: translateY(-50%);
+  right: 400px;
+  top: 100px;
   background: white;
   padding: 20px;
   width: 600px;
@@ -83,7 +80,7 @@ h1 {
 }
 
 #story-container {
-  min-height: 200px;
+  max-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
