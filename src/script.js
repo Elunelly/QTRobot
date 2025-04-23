@@ -47,7 +47,7 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   let isplaying = false;
   let story;
   let emotionposList;
-  let speed = 60;
+  let speed = 65;
 
   function getStory(story) {
     return QTstories_path + story + QTstories_ext;
@@ -83,15 +83,12 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
 
   function getEmotionPosInText() {
     let s = storyLines;
-    let c = 0;
     let emopos = s.indexOf('[');
     emotionposList = {};
     while (emopos != -1) {
-      c+=emopos;
-      s = s.substring(emopos+1);
-      let emotion = s.substring(0,s.indexOf(']'));
-      emotionposList[c]=emotion;
-      emopos = s.indexOf('[');
+      let emotion = s.substring(emopos+1,s.indexOf(']',emopos));
+      emotionposList[emopos]=emotion;
+      emopos = s.indexOf('[',emopos+1);
     }
     console.log(emotionposList);
   }
@@ -111,13 +108,12 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
       }
       let emotion = emotionposList[index+30];
       if (emotion)
-        currentTimeout = setTimeout(() => {changeEmotion(emotion)}, 1500);
-      console.log(index + ': ' + currentTimeout);
+        setTimeout(() => {changeEmotion(emotion)}, 1500);
       if (emotionposList[index]) index+=emotionposList[index].length+1;
       else storyContainer.innerText += storyLines[index];
+      storyContainer.scrollTop = storyContainer.scrollHeight;
       index++;
-      currentTimeout = setTimeout(displayNextCharacter, speed);
-      console.log(index + ': ' + currentTimeout);
+      setTimeout(displayNextCharacter, speed);
     }
     displayNextCharacter();
   }
