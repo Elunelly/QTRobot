@@ -40,12 +40,12 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   let index = 0;
   let storyLines = [];
   let currentTimeout;
-  let processing = false;
+  let isplaying = false;
+  let story;
+  let speed = 50;
 
-  async function loadStory(fileName) {
-    const response = await fetch('./res/txt/' + fileName + '.txt');
-    const text = await response.text();
-    return text.split('\n').map(line => line.trim()).filter(line => line);
+  function getStory(story) {
+    return QTstories_path + story + QTstories_ext;
   }
 
   function getQTfaceImg(emotion) {
@@ -63,8 +63,43 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
   function getQTAudio(fileName) {
     return QTaudio_path + QTaudio_fileStart + fileName + QTaudio_ext;
   }
-  
 
+  async function loadStory() {
+    story = storySelector.value;
+    const response = await fetch(getStory(story));
+    const text = await response.text();
+    index = 0;
+    storyLines = text;
+    isplaying = false;
+    console.log(storyLines);
+    return storyLines;
+  }
+
+  async function playStory() {
+    if (isplaying || storyLines.length === 0) return;
+    isplaying = true;
+    changeEmotion('talking');
+    storyAudio.play();
+    //displayNextCharacter();
+    //isplaying = false;
+
+    function displayNextCharacter() {
+      if(!isplaying || index >= storyLines.length) {
+      isplaying = false;
+      return;}
+      console.log("Hellooo");
+      let char = storyLines[index];
+      index++;
+      console.log(char);
+      storyContainer.innerText += char;
+      currentTimeout = setTimeout(displayNextCharacter, speed);
+    }
+    displayNextCharacter();
+  }
+
+
+
+/*
   async function playStory(fileName) {
     if (processing) return;
     processing = true;
@@ -133,6 +168,24 @@ const $url = `http://localhost:${$port}/`;  // (String)  -> website url root (fo
     paused = true;
     storyAudio.pause();
     clearTimeout(currentTimeout);
+  };*/
+
+  playBtn.onclick = async () => {
+    await playStory();
+  }
+
+  pauseBtn.onclick = () => {
+    isplaying = false;
+    storyAudio.pause();
+    clearTimeout(currentTimeout);
+    changeEmotion('neutral_state_blinking');
+  };
+
+  storySelector.onchange = () => {
+    clearStory();
+    loadStory();
+    storyAudio.src = getQTAudio(story);
+    storyAudio.currentTime = 0;
   };
   
 })();
