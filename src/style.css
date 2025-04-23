@@ -102,6 +102,25 @@ h1 {
   margin-bottom: -15px;
 }
 
+#story-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+#story-container::-webkit-scrollbar-track {
+  background: rgba(89, 43, 13, 0.3);
+  border-radius: 10px;
+}
+
+#story-container::-webkit-scrollbar-thumb {
+  background: rgba(140, 70, 20, 0.8);
+  border-radius: 10px;
+  border: 2px solid rgba(89, 43, 13, 0.5);
+}
+
+#story-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(160, 80, 25, 0.9);
+}
+
 
 #buttons {
   display: flex;
